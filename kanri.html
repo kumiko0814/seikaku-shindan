@@ -34,8 +34,16 @@ td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
 .dist .row{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12.5px;}
 .dist .lbl{width:150px;font-weight:800;color:#26405f;}
 .dist .bg{flex:1;height:12px;background:#eef4f9;border-radius:999px;overflow:hidden;}
-.dist .bf{height:100%;border-radius:999px;}
+.dist .bf{height:100%;border-radius:999px;display:block;}
 .dist .ct{width:44px;text-align:right;color:#7a8ba0;font-weight:700;}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:6px;}
+.tcard{background:#fbfdfe;border:1px solid #e6eef5;border-radius:12px;padding:12px 14px;border-top-width:3px;border-top-style:solid;}
+.tcard .tname{font-size:13px;font-weight:900;}
+.tcard .tn{font-size:24px;font-weight:900;color:#26405f;margin-top:2px;}
+.tcard .tn small{font-size:12px;font-weight:800;color:#7a8ba0;}
+.tcard .tpct{font-size:12px;font-weight:800;color:#7a8ba0;margin-left:4px;}
+.tcard .trow{font-size:12px;color:#607289;margin-top:4px;}
+.stitle{font-size:12.5px;font-weight:800;color:#26405f;margin:14px 0 4px;}
 .bug{border:1px solid #f0dde2;border-radius:12px;padding:10px 12px;margin-top:8px;background:#fffafb;}
 .bug .meta{font-size:11px;color:#9aa9b8;}
 .bug .txt{font-size:13.5px;margin:4px 0;}
@@ -83,6 +91,14 @@ td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
       <div class="sumb"><div class="n" id="sBug">–</div><div class="l">未対応の不具合報告</div></div>
     </div>
     <div class="dist" id="dist" style="margin-top:12px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>タイプ別統計</h2>
+    <div class="tgrid" id="tstats"></div>
+    <div id="axisAvg"></div>
+    <div id="chCross"></div>
+    <p class="muted" style="margin-top:10px;">※ 同点で2タイプ併記の方（例：主導 × 促進）は、両方のタイプに数えています。そのため合計が回答数を超えることがあります。</p>
   </div>
 
   <div class="card">
@@ -149,7 +165,7 @@ function loadAll(){
     rows=raw.filter(function(r){ return r.run_id!=='seikaku-selftest'; }).map(function(r){
       var m={}; try{ m=JSON.parse(r.memo||'{}'); }catch(e){}
       return {run_id:r.run_id, task_key:r.task_key, ch:(m.ch||String(r.run_id).replace('seikaku-','')),
-        name:m.name||r.owner_members||'', mail:m.mail||'', type:m.type||'',
+        name:m.name||r.owner_members||'', mail:m.mail||'', type:m.type||'', sub:m.sub||'',
         s:m.scores||{}, at:m.at||r.updated_at};
     });
     bugs=Array.isArray(res[1])?res[1]:[];
@@ -182,6 +198,55 @@ function render(){
       '<span class="bg"><span class="bf" style="width:'+pct+'%;background:'+c+'"></span></span>'+
       '<span class="ct">'+dist[k]+'名</span></div>';
   }).join('')||'<p class="muted">まだ回答がありません</p>';
+
+  // タイプ別統計
+  var AXES=[['主導タイプ','shudo'],['促進タイプ','sokushin'],['支持タイプ','shiji'],['分析タイプ','bunseki']];
+  var total=rows.length;
+  $('tstats').innerHTML=total?AXES.map(function(p){
+    var k=p[0], ax=p[1], c=TYPE_COLORS[k]||'#9aa9b8';
+    var mem=rows.filter(function(r){ return (r.type||'').indexOf(k)>=0; });
+    var n=mem.length, pct=Math.round(n/total*100);
+    var vals=mem.map(function(r){ return Number(r.s[ax]); }).filter(function(v){ return v>=5&&v<=20; });
+    var avg=vals.length?(vals.reduce(function(a,b){return a+b;},0)/vals.length):null;
+    var subCnt={};
+    mem.forEach(function(r){ String(r.sub||'').split('・').forEach(function(sk){ if(sk)subCnt[sk]=(subCnt[sk]||0)+1; }); });
+    var subKeys=Object.keys(subCnt).sort(function(a,b){ return subCnt[b]-subCnt[a]; });
+    var subTop=subKeys.length?(subKeys[0].replace('タイプ','')+'（'+subCnt[subKeys[0]]+'名）'):'－';
+    return '<div class="tcard" style="border-top-color:'+c+'">'+
+      '<div class="tname" style="color:'+c+'">'+esc(k)+'</div>'+
+      '<div class="tn">'+n+'<small>名</small><span class="tpct">'+pct+'%</span></div>'+
+      '<div class="trow">このタイプの平均：<b>'+(avg==null?'－':avg.toFixed(1)+'点')+'</b></div>'+
+      '<div class="trow">多いサブタイプ：<b>'+esc(subTop)+'</b></div>'+
+      '</div>';
+  }).join(''):'<p class="muted">まだ回答がありません</p>';
+
+  var axHtml=AXES.map(function(p){
+    var k=p[0], ax=p[1], c=TYPE_COLORS[k]||'#9aa9b8';
+    var vals=rows.map(function(r){ return Number(r.s[ax]); }).filter(function(v){ return v>=5&&v<=20; });
+    if(!vals.length) return '';
+    var avg=vals.reduce(function(a,b){return a+b;},0)/vals.length;
+    var w=Math.max(Math.round((avg-5)/15*100),4);
+    return '<div class="row"><span class="lbl">'+esc(k.replace('タイプ',''))+'の平均</span>'+
+      '<span class="bg"><span class="bf" style="width:'+w+'%;background:'+c+'"></span></span>'+
+      '<span class="ct" style="width:56px;">'+avg.toFixed(1)+'点</span></div>';
+  }).join('');
+  $('axisAvg').innerHTML=axHtml?('<div class="stitle">全員の平均スコア（各軸5〜20点）</div><div class="dist">'+axHtml+'</div>'):'';
+
+  var chs={};
+  rows.forEach(function(r){
+    var c=r.ch||'－'; chs[c]=chs[c]||{n:0}; chs[c].n++;
+    AXES.forEach(function(p){ if((r.type||'').indexOf(p[0])>=0) chs[c][p[0]]=(chs[c][p[0]]||0)+1; });
+  });
+  var chKeys=Object.keys(chs).sort(function(a,b){ return chs[b].n-chs[a].n; });
+  $('chCross').innerHTML=(chKeys.length>=2)?(
+    '<div class="stitle">チャネル別の内訳</div>'+
+    '<div class="tbox" style="max-height:260px;"><table><thead><tr><th>チャネル</th><th>回答数</th>'+
+    AXES.map(function(p){ return '<th>'+esc(p[0].replace('タイプ',''))+'</th>'; }).join('')+'</tr></thead><tbody>'+
+    chKeys.map(function(c){
+      return '<tr><td><b>'+esc(c)+'</b></td><td>'+chs[c].n+'</td>'+
+        AXES.map(function(p){ return '<td>'+(chs[c][p[0]]||0)+'</td>'; }).join('')+'</tr>';
+    }).join('')+'</tbody></table></div>'
+  ):'';
 
   // 一覧
   $('tbody').innerHTML=rows.map(function(r,i){
