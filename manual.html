@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Merone 性格診断｜管理者マニュアル</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic',sans-serif;
+  background:#f1f7fb;color:#4a4446;line-height:1.85;-webkit-overflow-scrolling:touch;
+}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 70px;}
+h1{font-size:20px;color:#1d3149;}
+h1 small{font-size:12px;color:#bd7886;letter-spacing:.2em;display:block;font-weight:800;}
+.nav{margin-top:10px;font-size:13px;}
+.nav a{color:#5f8ab0;font-weight:700;margin-right:14px;}
+.card{background:#fff;border-radius:16px;padding:20px;margin-top:14px;box-shadow:0 4px 16px rgba(38,64,95,.07);}
+.card h2{font-size:16px;color:#26405f;margin-bottom:10px;padding-left:10px;border-left:4px solid #cf8f9c;}
+.card h3{font-size:14px;color:#bd7886;margin:14px 0 6px;}
+.card p,.card li{font-size:14px;}
+.card ul{list-style:none;}
+.card li{padding-left:1.1em;position:relative;margin-top:5px;}
+.card li:before{content:"・";position:absolute;left:0;color:#cf8f9c;}
+.warn{background:#fbeef1;border-radius:12px;padding:12px 14px;font-size:13.5px;margin-top:10px;}
+.suisoku{font-size:12px;color:#9aa9b8;}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+th{background:#eaf3fa;color:#26405f;padding:8px;text-align:left;white-space:nowrap;}
+td{padding:8px;border-bottom:1px solid #eef2f6;vertical-align:top;}
+.tbox{overflow-x:auto;}
+.tygrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+@media(max-width:700px){ .tygrid{grid-template-columns:1fr;} }
+.ty{border-radius:14px;padding:16px;border:1.5px solid #e6eef5;background:#fbfdfe;}
+.ty h3{margin:0 0 4px;font-size:15.5px;}
+.ty .en{font-size:11px;letter-spacing:.15em;color:#9aa9b8;font-weight:800;}
+.ty .poke{font-size:12px;color:#7a8ba0;margin-top:2px;}
+.ty h4{font-size:12.5px;font-weight:800;margin:12px 0 4px;padding:2px 10px;border-radius:999px;display:inline-block;}
+.ty ul{list-style:none;}
+.ty li{font-size:13.5px;padding-left:1.1em;position:relative;margin-top:3px;}
+.ty li:before{content:"・";position:absolute;left:0;}
+.ty.shudo{border-color:#c6d2e0;} .ty.shudo h3{color:#1d3149;} .ty.shudo h4{background:#e7edf4;color:#1d3149;} .ty.shudo li:before{color:#1d3149;}
+.ty.soku{border-color:#ecd3da;} .ty.soku h3{color:#bd7886;} .ty.soku h4{background:#fbeef1;color:#bd7886;} .ty.soku li:before{color:#bd7886;}
+.ty.shiji{border-color:#f0dde2;} .ty.shiji h3{color:#c98a97;} .ty.shiji h4{background:#fbeef1;color:#c98a97;} .ty.shiji li:before{color:#cf8f9c;}
+.ty.bun{border-color:#d3e4f0;} .ty.bun h3{color:#5f8ab0;} .ty.bun h4{background:#e7f0f8;color:#5f8ab0;} .ty.bun li:before{color:#7fb0d2;}
+.quote{font-size:13.5px;background:#f6f9fc;border-left:3px solid #7fb0d2;border-radius:0 10px 10px 0;padding:8px 12px;margin-top:6px;}
+#gate{max-width:380px;margin:80px auto;text-align:center;}
+#gate .card{padding:26px 22px;}
+#gate input{width:100%;text-align:center;margin-top:12px;border:1.5px solid #d7e4ef;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;outline:none;background:#fbfdfe;}
+#gate button{width:100%;margin-top:14px;padding:13px;border:none;border-radius:999px;font-size:14px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#c76e85,#cf8f9c);}
+.muted{font-size:12.5px;color:#7a8ba0;}
+footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <h2 style="border:none;padding:0;">Merone 性格診断｜管理者マニュアル</h2>
+    <p class="muted">あいことばを入力してください</p>
+    <input type="password" id="pw" placeholder="あいことば">
+    <button id="pwBtn">ひらく</button>
+    <p class="muted" id="pwNg" style="display:none;color:#bd7886;font-weight:800;margin-top:8px;">あいことばが違います</p>
+  </div>
+</div>
+
+<div class="wrap" id="main" style="display:none;">
+  <h1><small>MERONE</small>性格診断 管理者マニュアル</h1>
+  <div class="nav"><a href="./kanri.html">← 管理ページ</a><a href="./index.html">診断ページ</a></div>
+
+  <div class="card">
+    <h2>1. この診断でできること・してはいけないこと</h2>
+    <p>この診断はソーシャルスタイル理論に基づく4タイプ分類です。目的は「声のかけ方・任せ方・チーム設計の共通言語」をつくることです。おおよそ9割の方はよく当てはまりますが、当てはまらない方もいます（理想の自分をイメージして回答すると、実際の行動とズレることがあります）。</p>
+    <div class="warn">
+      <b>してはいけないこと</b><br>
+      ・結果でレッテルを貼る、タイプを理由に仕事を制限する<br>
+      ・採用・評価・処遇の唯一の判断基準にする（あくまで接し方のヒント）<br>
+      ・本人に「低い＝欠点」と伝える（低スコアは「意識が必要な領域」という意味）<br>
+      ・結果データを社外や本人の同意なく共有する
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. スコアの読み方</h2>
+    <ul>
+      <li>各タイプ5問×1〜4点＝<b>5〜20点</b>。最高点がメインタイプ、2番目がサブタイプ（結果画面に自動表示）</li>
+      <li>同点の場合はハイブリッドとして併記されます（例「主導 × 促進」）</li>
+      <li><b>14点以上</b>＝そのスタイルがはっきり強い ／ <b>10点以下</b>＝そのスタイルを使うのにエネルギーが要る</li>
+      <li>4つの点差が小さい人は、状況で使い分けられるバランス型</li>
+    </ul>
+    <h3>旧版（FAZOM社フォーム）のスコアとの関係</h3>
+    <p>旧版のスプレッドシートは <b>−9〜＋8前後のプラスマイナス方式</b>で、当診断の5〜20点方式とは採点式が異なり互換性はありません。旧版のマイナスは「そのタイプの傾向が弱い」という意味で、異常値ではありません。おおまかな対応の目安は「旧＋3以上 ≒ 新14点以上」「旧−4以下 ≒ 新10点以下」です<span class="suisoku">（採点式が違うため換算は目安・推測です）</span>。</p>
+  </div>
+
+  <div class="card">
+    <h2>3. 結果の読み筋（チェックポイント）</h2>
+    <ul>
+      <li><b>リーダー候補（太陽タイプ）</b>：主導＋分析、または主導＋促進の2つが両方高い人（目安14点以上）。チームリーダー・役員候補として期待できます</li>
+      <li><b>全体的にスコアが高い人</b>：どのスタイルも使える人。運営やチームの中心に巻き込むのがおすすめ</li>
+      <li><b>主導だけ突出して他が低い</b>（目安：主導14以上・他が10以下）：個人成果は出やすい一方、チーム運営では摩擦が起きやすいパターン。個人ミッション型の任せ方が向きます</li>
+      <li><b>支持のみ高く、他が全体的に低い</b>：「成長させること」をゴールにせず、社会的意義と承認を受けられる居場所の安心感をゴールに設計します。アウトプットの補助を手厚く</li>
+      <li><b>結果に本人が違和感を持つ場合</b>：自己認知とのズレの可能性。結果を押し付けず、本人との対話を優先してください</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>4. タイプ別マネジメント早見表</h2>
+    <div class="tygrid">
+
+      <div class="ty shudo">
+        <h3>主導タイプ</h3><span class="en">DRIVING</span>
+        <div class="poke">ポケモンで言うと：ピカチュウ・リザードン系（攻撃と素早さ特化。防御は脆いので、失速した時だけ丁寧に）</div>
+        <h4>特徴</h4>
+        <ul><li>結果第一・行動と決断が早い</li><li>指示されたくない・効率重視</li><li>一見ドライで怖そうに見える</li></ul>
+        <h4>褒め方</h4>
+        <ul><li>成果と数字をストレートに褒める</li><li>事実を間接的に褒めるのも効果的</li></ul>
+        <h4>声かけ例</h4>
+        <div class="quote">「〜についてもう少し詳しくみんなに教えてもらえる？」（頼る形で聞く）</div>
+        <div class="quote">「○○の方法と△△の方法、どっちを選ぶ？」（選択権を渡す）</div>
+        <h4>サポートのコツ</h4>
+        <ul><li>基本こちらからあれこれ言わない。質問には端的に</li><li>結論→背景→結論の順で話す</li><li>負けず嫌いなので軽い競争や煽りが効く</li><li>「助けてください」と言われた時に背中を押す</li></ul>
+        <h4>NG</h4>
+        <ul><li>長文・細かい管理・指示口調</li><li>気持ちへの寄り添いだけで結果を出させないこと</li></ul>
+      </div>
+
+      <div class="ty bun">
+        <h3>分析タイプ</h3><span class="en">ANALYTICAL</span>
+        <div class="poke">ポケモンで言うと：ラッキー・ブラッキー系(チームに1人いると安心の補助・回復役)</div>
+        <h4>特徴</h4>
+        <ul><li>客観派・計画的・正確さと合理性を追求</li><li>完全主義で変化に弱い・感情を表に出さない</li><li>商談など前に出る役は苦手。資料とロジック固めが得意</li></ul>
+        <h4>褒め方</h4>
+        <ul><li>「すごい」ではなく具体的に（例：商品ページのどこが良いか）</li><li>ニッチなこだわり・プロセスを承認（反応が薄くても内心嬉しい）</li></ul>
+        <h4>声かけ例</h4>
+        <div class="quote">「この間の資料の評判がすごく良かったから、今回も力を貸してもらえませんか」</div>
+        <div class="quote">注意する時は「このミスは何が原因だったと思う？」と本人に考えてもらう</div>
+        <h4>サポートのコツ</h4>
+        <ul><li>指示はデータを用いて論理的に。漠然とした指示では動けない</li><li>質問はまとめて来るので、全部に漏れなく定量的に回答</li><li>ロジックが腹落ちすれば自家発電できる。放置しても大丈夫</li><li>募集・案内には「戦略」「具体的」「秘訣」のワードが刺さる</li><li>コツコツやったことを可視化（スタンプラリー等）</li></ul>
+        <h4>NG</h4>
+        <ul><li>急かす・あいまいな指示・情緒だけの励まし</li><li>構いすぎ（あれこれ言われるのが好きではない）</li></ul>
+      </div>
+
+      <div class="ty soku">
+        <h3>促進タイプ</h3><span class="en">EXPRESSIVE</span>
+        <div class="poke">ポケモンで言うと：プラスル・ドーブル系（味方を盛り上げる補助が最強。防御は脆いので落ち込みに注意）</div>
+        <h4>特徴</h4>
+        <ul><li>お祭り好き・アイデアマン・注目されたい</li><li>モチベーションが最もブレやすい・飽きっぽい</li><li>三日坊主の傾向。楽しいこと＞やるべきこと になりがち</li></ul>
+        <h4>褒め方</h4>
+        <ul><li>大袈裟に。「天才だね！」「ええやん！」</li><li>質より量を褒める。みんなでパチパチスタンプ</li><li>他の人が褒められている場を見せるのも効く</li></ul>
+        <h4>声かけ例</h4>
+        <div class="quote">「このイベント、あなたなら必ずできる！」</div>
+        <div class="quote">アイデアを引き出す時はまず肯定：「色々考えてくれて素晴らしい！こうすれば更に良くなるのでは？」</div>
+        <h4>サポートのコツ</h4>
+        <ul><li>キャンペーン・お祭り企画がいちばん刺さる</li><li>グループの盛り上げ担当をお願いすると輝く（宴会部長）</li><li>細かく見すぎない。ふわっとしたフィードバックで信じて背中を押す</li><li>「何のためにやってたんだっけ？」を定期的に想起（アンカリング）</li><li>ワクワクする予定を先に押さえてもらい、それをモチベに走ってもらう</li></ul>
+        <h4>NG</h4>
+        <ul><li>批判から入る・細かいルールで縛る</li><li>地道な作業だけを任せる</li></ul>
+      </div>
+
+      <div class="ty shiji">
+        <h3>支持タイプ</h3><span class="en">AMIABLE</span>
+        <div class="poke">ポケモンで言うと：カメックス・マリルリ・カビゴン系（バランス型で防御が高く、どこでも活躍）。日本人の約6割はこのタイプ</div>
+        <h4>特徴</h4>
+        <ul><li>友好派・人のために頑張る・チームワーク重視</li><li>頼まれるとNOと言えない・感情を抑えがち</li><li>吐露が苦手で、モヤモヤを溜め込みやすい</li></ul>
+        <h4>褒め方</h4>
+        <ul><li>結果よりプロセスを承認して褒める</li><li>みんなの前で紹介して褒める（承認欲求は高め・本人は自覚薄）</li><li>感謝をまめに言葉で伝える</li></ul>
+        <h4>声かけ例</h4>
+        <div class="quote">「ぜひ○○さんの力を貸してほしい！」（助けを求める形で依頼）</div>
+        <div class="quote">「頑張ってるね。いま何か困っていることはない？」（吐露が苦手なので、こちらから聞いて引き出す）</div>
+        <h4>サポートのコツ</h4>
+        <ul><li>とにかく丁寧に、細かければ細かいほど良い。オンボーディングは手厚く</li><li>マイルストーンを一緒に作り、目標は本人に宣言してもらう（他責防止）</li><li>「誰かのため・社会のためになる」文脈で意味づけする</li><li>同じ支持タイプの先輩の成功事例をシェアする</li><li>やることの道筋さえ決まればコツコツやり切れる</li></ul>
+        <h4>NG</h4>
+        <ul><li>放置・ざっくり指示・結果だけを求める</li><li>本人からの相談を待つこと（待っていても出てきません）</li></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>5. チームづくりの型</h2>
+    <ul>
+      <li><b>分布の目安</b>：主導1：分析1：促進2：支持6。支持タイプが多数派である前提で設計する</li>
+      <li><b>王・将・兵モデル</b>：全体視点の「王」、チーム両軸視点の「将」（約1割）、自分視点の「兵」（約9割）。兵から将に上がるには、ロールモデルと行動指針をセットで持ってもらう</li>
+      <li><b>ロールモデル</b>：憧れの人を明確に決めてもらい、週報を出してもらう。客観評価と自己評価の差はソフトスキル（人間性）のチェックシートで認知してもらう</li>
+      <li><b>ランク設計</b>：初級・中級・上級など8〜16階層。昇格条件を明確にし、1ヶ月に増やすスキルは最大3つまで。見える世界が広すぎると選べなくなる</li>
+      <li><b>成果指標とプロセスを分ける</b>：例「メルカリ評価70」は成果指標。そこに到達する「やり方」を学ぶルートを見せると、支持・分析タイプが動きやすくなる</li>
+      <li><b>アンカリング</b>：「何のためにやるのか」をオンボーディングや月初に定期的に想起してもらう（支持・促進に特に有効）</li>
+      <li><b>成果の方程式</b>：モチベーションケア × スキルマネジメント（プロセスの明確化）。この2つがあれば、スコアが低くても結果は出せます</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>6. 管理ページの使い方</h2>
+    <ul>
+      <li><a href="./kanri.html" style="color:#5f8ab0;font-weight:700;">管理ページ</a>で回答一覧・タイプ分布・CSVエクスポート・回答の削除ができます</li>
+      <li>「不具合報告 受信箱」に利用者からの報告が届きます。対応したら「対応済みにする」を押してください（毎時の自動修正パトロールも同じ報告を見ています）</li>
+      <li>「動作チェック」ボタンで保存の仕組みが正常か確認できます（書込→読込→削除を実際に試します）</li>
+      <li>診断URLに <b>?ch=グループ名</b> を付けて配ると、グループ別に集計できます（例：?ch=sales）</li>
+    </ul>
+  </div>
+
+  <footer>Merone 性格診断 管理者マニュアル v20260804b</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var PASS='merone';
+function $(id){ return document.getElementById(id); }
+function unlock(){ $('gate').style.display='none'; $('main').style.display='block'; }
+$('pwBtn').onclick=function(){
+  if($('pw').value.trim().toLowerCase()===PASS){ try{sessionStorage.setItem('sk_admin','1');}catch(e){} unlock(); }
+  else{ $('pwNg').style.display='block'; }
+};
+$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter')$('pwBtn').click(); });
+try{ if(sessionStorage.getItem('sk_admin')==='1') unlock(); }catch(e){}
+})();
+</script>
+</body>
+</html>
