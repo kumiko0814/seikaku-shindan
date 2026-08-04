@@ -34,7 +34,9 @@ td{padding:8px;border-bottom:1px solid #eef2f6;vertical-align:top;}
 .ty{border-radius:14px;padding:16px;border:1.5px solid #e6eef5;background:#fbfdfe;}
 .ty h3{margin:0 0 4px;font-size:15.5px;}
 .ty .en{font-size:11px;letter-spacing:.15em;color:#9aa9b8;font-weight:800;}
-.ty .poke{font-size:12px;color:#7a8ba0;margin-top:2px;}
+.ty .poke{display:flex;align-items:center;gap:10px;margin-top:8px;background:#fff;border-radius:12px;padding:8px 10px;}
+.ty .poke svg{flex-shrink:0;}
+.ty .poke span{font-size:12px;color:#7a8ba0;}
 .ty h4{font-size:12.5px;font-weight:800;margin:12px 0 4px;padding:2px 10px;border-radius:999px;display:inline-block;}
 .ty ul{list-style:none;}
 .ty li{font-size:13.5px;padding-left:1.1em;position:relative;margin-top:3px;}
@@ -105,11 +107,12 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
 
   <div class="card">
     <h2>4. タイプ別マネジメント早見表</h2>
+    <p class="muted">ポケモン例えのイラストは、著作権の関係で公式絵は使えないため、Meroneオリジナルのイメージキャラです。</p>
     <div class="tygrid">
 
       <div class="ty shudo">
         <h3>主導タイプ</h3><span class="en">DRIVING</span>
-        <div class="poke">ポケモンで言うと：ピカチュウ・リザードン系（攻撃と素早さ特化。防御は脆いので、失速した時だけ丁寧に）</div>
+        <div class="poke"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><line x1="8" y1="48" x2="22" y2="48" stroke="#c6d2e0" stroke-width="3" stroke-linecap="round"/><line x1="12" y1="58" x2="24" y2="58" stroke="#c6d2e0" stroke-width="3" stroke-linecap="round"/><line x1="8" y1="68" x2="20" y2="68" stroke="#c6d2e0" stroke-width="3" stroke-linecap="round"/><polygon points="40,34 46,16 52,32" fill="#1d3149"/><polygon points="64,32 74,16 76,34" fill="#1d3149"/><ellipse cx="56" cy="60" rx="28" ry="26" fill="#1d3149"/><circle cx="47" cy="56" r="5" fill="#fff"/><circle cx="48.5" cy="57" r="2.4" fill="#1d3149"/><circle cx="67" cy="56" r="5" fill="#fff"/><circle cx="68.5" cy="57" r="2.4" fill="#1d3149"/><path d="M43 47 L52 50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M71 47 L62 50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M52 70 Q57 74 63 69" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/><polygon points="88,20 79,36 85,36 76,52 92,34 85,34 94,20" fill="#7fb0d2"/></svg><span>ポケモンで言うと：ピカチュウ・リザードン系（攻撃と素早さ特化。防御は脆いので、失速した時だけ丁寧に）</span></div>
         <h4>特徴</h4>
         <ul><li>結果第一・行動と決断が早い</li><li>指示されたくない・効率重視</li><li>一見ドライで怖そうに見える</li></ul>
         <h4>褒め方</h4>
@@ -125,7 +128,7 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
 
       <div class="ty bun">
         <h3>分析タイプ</h3><span class="en">ANALYTICAL</span>
-        <div class="poke">ポケモンで言うと：ラッキー・ブラッキー系(チームに1人いると安心の補助・回復役)</div>
+        <div class="poke"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><line x1="50" y1="18" x2="50" y2="34" stroke="#7fb0d2" stroke-width="2.5"/><circle cx="50" cy="15" r="4" fill="#cf8f9c"/><ellipse cx="50" cy="60" rx="28" ry="26" fill="#7fb0d2"/><circle cx="41" cy="55" r="8" fill="#fff" stroke="#26405f" stroke-width="2.5"/><circle cx="61" cy="55" r="8" fill="#fff" stroke="#26405f" stroke-width="2.5"/><line x1="49" y1="55" x2="53" y2="55" stroke="#26405f" stroke-width="2.5"/><circle cx="41" cy="56" r="2.4" fill="#26405f"/><circle cx="61" cy="56" r="2.4" fill="#26405f"/><path d="M46 71 L56 71" stroke="#26405f" stroke-width="2.5" stroke-linecap="round"/><path d="M78 72 a3.5 3.5 0 0 1 5.5 4.4 l-5.5 5.6 l-5.5-5.6 a3.5 3.5 0 0 1 5.5-4.4" fill="#fbeef1"/></svg><span>ポケモンで言うと：ラッキー・ブラッキー系（チームに1人いると安心の補助・回復役）</span></div>
         <h4>特徴</h4>
         <ul><li>客観派・計画的・正確さと合理性を追求</li><li>完全主義で変化に弱い・感情を表に出さない</li><li>商談など前に出る役は苦手。資料とロジック固めが得意</li></ul>
         <h4>褒め方</h4>
@@ -141,7 +144,7 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
 
       <div class="ty soku">
         <h3>促進タイプ</h3><span class="en">EXPRESSIVE</span>
-        <div class="poke">ポケモンで言うと：プラスル・ドーブル系（味方を盛り上げる補助が最強。防御は脆いので落ち込みに注意）</div>
+        <div class="poke"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><ellipse cx="26" cy="46" rx="7" ry="5" fill="#bd7886" transform="rotate(-40 26 46)"/><ellipse cx="74" cy="46" rx="7" ry="5" fill="#bd7886" transform="rotate(40 74 46)"/><ellipse cx="50" cy="62" rx="26" ry="24" fill="#bd7886"/><path d="M40 56 q3 -4 6 0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M56 56 q3 -4 6 0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M43 65 q8 10 16 0 z" fill="#fff"/><path d="M31 64 h7 M34.5 60.5 v7" stroke="#fbeef1" stroke-width="2.5" stroke-linecap="round"/><path d="M63 64 h7 M66.5 60.5 v7" stroke="#fbeef1" stroke-width="2.5" stroke-linecap="round"/><path d="M80 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="#cf8f9c"/><path d="M20 24 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5 z" fill="#e8c9d1"/></svg><span>ポケモンで言うと：プラスル・ドーブル系（味方を盛り上げる補助が最強。防御は脆いので落ち込みに注意）</span></div>
         <h4>特徴</h4>
         <ul><li>お祭り好き・アイデアマン・注目されたい</li><li>モチベーションが最もブレやすい・飽きっぽい</li><li>三日坊主の傾向。楽しいこと＞やるべきこと になりがち</li></ul>
         <h4>褒め方</h4>
@@ -157,7 +160,7 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
 
       <div class="ty shiji">
         <h3>支持タイプ</h3><span class="en">AMIABLE</span>
-        <div class="poke">ポケモンで言うと：カメックス・マリルリ・カビゴン系（バランス型で防御が高く、どこでも活躍）。日本人の約6割はこのタイプ</div>
+        <div class="poke"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><ellipse cx="22" cy="66" rx="6" ry="4.5" fill="#cf8f9c"/><ellipse cx="78" cy="66" rx="6" ry="4.5" fill="#cf8f9c"/><ellipse cx="50" cy="60" rx="30" ry="27" fill="#cf8f9c"/><ellipse cx="50" cy="70" rx="18" ry="13" fill="#fbeef1"/><path d="M38 66 q12 -8 24 0" stroke="#e8c9d1" stroke-width="2" fill="none"/><path d="M42 76 q8 5 16 0" stroke="#e8c9d1" stroke-width="2" fill="none"/><path d="M39 52 q4 -5 8 0" stroke="#4a4446" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M53 52 q4 -5 8 0" stroke="#4a4446" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M47 59 q3 3 6 0" stroke="#4a4446" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="33" cy="58" r="3.5" fill="#e8c9d1"/><circle cx="67" cy="58" r="3.5" fill="#e8c9d1"/><path d="M82 30 a3.5 3.5 0 0 1 5.5 4.4 l-5.5 5.6 l-5.5-5.6 a3.5 3.5 0 0 1 5.5-4.4" fill="#bd7886"/></svg><span>ポケモンで言うと：カメックス・マリルリ・カビゴン系（バランス型で防御が高く、どこでも活躍）。日本人の約6割はこのタイプ</span></div>
         <h4>特徴</h4>
         <ul><li>友好派・人のために頑張る・チームワーク重視</li><li>頼まれるとNOと言えない・感情を抑えがち</li><li>吐露が苦手で、モヤモヤを溜め込みやすい</li></ul>
         <h4>褒め方</h4>
@@ -197,7 +200,7 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
     </ul>
   </div>
 
-  <footer>Merone 性格診断 管理者マニュアル v20260804c</footer>
+  <footer>Merone 性格診断 管理者マニュアル v20260804d</footer>
 </div>
 
 <script>
