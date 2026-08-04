@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Merone 性格診断｜管理</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic',sans-serif;
+  background:#f1f7fb;color:#4a4446;line-height:1.7;-webkit-overflow-scrolling:touch;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px;}
+h1{font-size:20px;color:#1d3149;}
+h1 small{font-size:12px;color:#bd7886;letter-spacing:.2em;display:block;font-weight:800;}
+.card{background:#fff;border-radius:16px;padding:18px;margin-top:14px;box-shadow:0 4px 16px rgba(38,64,95,.07);}
+.card h2{font-size:15px;color:#26405f;margin-bottom:10px;}
+.btn{border:none;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;
+  background:linear-gradient(135deg,#c76e85,#cf8f9c);color:#fff;}
+.btn.blue{background:#e7f0f8;color:#26405f;}
+.btn.line{background:#fff;border:1.5px solid #d7e4ef;color:#26405f;}
+input[type=password],input[type=text]{border:1.5px solid #d7e4ef;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;outline:none;background:#fbfdfe;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
+th{background:#eaf3fa;color:#26405f;padding:7px 8px;text-align:left;white-space:nowrap;position:sticky;top:0;}
+td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
+.tbox{overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid #e6eef5;border-radius:10px;}
+.typ{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:800;color:#fff;}
+.del{color:#bd7886;cursor:pointer;font-weight:800;padding:2px 6px;}
+.sum{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+.sumb{flex:1;min-width:150px;background:#fbfdfe;border:1px solid #e6eef5;border-radius:12px;padding:10px 12px;}
+.sumb .n{font-size:22px;font-weight:900;color:#26405f;}
+.sumb .l{font-size:11.5px;color:#7a8ba0;font-weight:700;}
+.dist .row{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12.5px;}
+.dist .lbl{width:150px;font-weight:800;color:#26405f;}
+.dist .bg{flex:1;height:12px;background:#eef4f9;border-radius:999px;overflow:hidden;}
+.dist .bf{height:100%;border-radius:999px;}
+.dist .ct{width:44px;text-align:right;color:#7a8ba0;font-weight:700;}
+.bug{border:1px solid #f0dde2;border-radius:12px;padding:10px 12px;margin-top:8px;background:#fffafb;}
+.bug .meta{font-size:11px;color:#9aa9b8;}
+.bug .txt{font-size:13.5px;margin:4px 0;}
+.bug .st{font-size:11px;font-weight:800;border-radius:999px;padding:2px 10px;display:inline-block;}
+.bug .st.open{background:#fbeef1;color:#bd7886;}
+.bug .st.done{background:#e7f0f8;color:#5f8ab0;}
+.muted{font-size:12.5px;color:#7a8ba0;}
+#hlog{font-size:12.5px;margin-top:8px;white-space:pre-wrap;font-family:Menlo,monospace;background:#fbfdfe;border:1px solid #e6eef5;border-radius:10px;padding:10px;display:none;}
+#gate{max-width:380px;margin:80px auto;text-align:center;}
+#gate .card{padding:26px 22px;}
+#gate input{width:100%;text-align:center;margin-top:12px;}
+#gate .btn{width:100%;margin-top:14px;padding:13px;}
+.topbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;}
+@media(max-width:640px){ .dist .lbl{width:110px;} }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <h2>Merone 性格診断｜管理ページ</h2>
+    <p class="muted">あいことばを入力してください</p>
+    <input type="password" id="pw" placeholder="あいことば">
+    <button class="btn" id="pwBtn">ひらく</button>
+    <p class="muted" id="pwNg" style="display:none;color:#bd7886;font-weight:800;margin-top:8px;">あいことばが違います</p>
+  </div>
+</div>
+
+<div class="wrap" id="main" style="display:none;">
+  <h1><small>MERONE</small>性格診断 管理ページ</h1>
+  <div class="topbar">
+    <button class="btn" id="btnReload">再読み込み</button>
+    <button class="btn blue" id="btnCsv">CSVエクスポート</button>
+    <button class="btn line" id="btnHealth">動作チェック（書込・読込・削除）</button>
+    <span class="muted" id="lastLoad"></span>
+  </div>
+  <div id="hlog"></div>
+
+  <div class="card">
+    <h2>サマリー</h2>
+    <div class="sum">
+      <div class="sumb"><div class="n" id="sTotal">–</div><div class="l">回答数</div></div>
+      <div class="sumb"><div class="n" id="sToday">–</div><div class="l">今日の回答</div></div>
+      <div class="sumb"><div class="n" id="sBug">–</div><div class="l">未対応の不具合報告</div></div>
+    </div>
+    <div class="dist" id="dist" style="margin-top:12px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>回答一覧</h2>
+    <p class="muted">列：日時 / チャネル / おなまえ / メール / 判定 / 主導・促進・支持・分析（各5〜20点）</p>
+    <div class="tbox"><table id="tbl">
+      <thead><tr><th>日時</th><th>ch</th><th>おなまえ</th><th>メール</th><th>判定</th><th>主導</th><th>促進</th><th>支持</th><th>分析</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h2>不具合報告 受信箱</h2>
+    <div id="bugBox"><p class="muted">読み込み中…</p></div>
+  </div>
+
+  <div class="card">
+    <h2>採点ロジック（Merone独自・公開仕様）</h2>
+    <p class="muted">各タイプ5問×4件法（1〜4点）の合計＝5〜20点。最高点のタイプが判定（同点は併記）。<br>
+    主導：Q1・4・7・17・19 ／ 促進：Q2・6・8・11・14 ／ 支持：Q3・5・9・16・18 ／ 分析：Q10・12・13・15・20</p>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SB_URL='https://inrvprlyobghviklulcv.supabase.co';
+var SB_KEY='sb_publishable_ZrCNcsRHMci-l7Fns8QtIA_X22XZGJp';
+var PASS='merone';
+var TYPE_COLORS={'主導タイプ':'#1d3149','促進タイプ':'#bd7886','支持タイプ':'#cf8f9c','分析タイプ':'#7fb0d2'};
+var rows=[]; var bugs=[];
+
+function $(id){ return document.getElementById(id); }
+function sb(path,opt){
+  opt=opt||{};
+  opt.headers=Object.assign({apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'},opt.headers||{});
+  return fetch(SB_URL+'/rest/v1/'+path,opt);
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function fmtDate(iso){
+  try{ var d=new Date(iso);
+    return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }catch(e){ return ''; }
+}
+
+// ============ あいことば ============
+function unlock(){ $('gate').style.display='none'; $('main').style.display='block'; loadAll(); }
+$('pwBtn').onclick=function(){
+  if($('pw').value.trim().toLowerCase()===PASS){ try{sessionStorage.setItem('sk_admin','1');}catch(e){} unlock(); }
+  else{ $('pwNg').style.display='block'; }
+};
+$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter')$('pwBtn').click(); });
+try{ if(sessionStorage.getItem('sk_admin')==='1') unlock(); }catch(e){}
+
+// ============ 読み込み ============
+function loadAll(){
+  $('lastLoad').textContent='読み込み中…';
+  Promise.all([
+    sb('promo_tasks?run_id=like.seikaku-*&owner_depts=eq.seikaku&order=updated_at.desc&limit=5000').then(function(r){return r.json();}),
+    sb('ailab_notes?member_id=eq.bug_seikaku&order=created_at.desc&limit=500').then(function(r){return r.json();}).catch(function(){return [];})
+  ]).then(function(res){
+    var raw=Array.isArray(res[0])?res[0]:[];
+    rows=raw.filter(function(r){ return r.run_id!=='seikaku-selftest'; }).map(function(r){
+      var m={}; try{ m=JSON.parse(r.memo||'{}'); }catch(e){}
+      return {run_id:r.run_id, task_key:r.task_key, ch:(m.ch||String(r.run_id).replace('seikaku-','')),
+        name:m.name||r.owner_members||'', mail:m.mail||'', type:m.type||'',
+        s:m.scores||{}, at:m.at||r.updated_at};
+    });
+    bugs=Array.isArray(res[1])?res[1]:[];
+    render();
+    $('lastLoad').textContent='最終読込 '+fmtDate(new Date().toISOString())+'｜'+rows.length+'件';
+  }).catch(function(e){
+    $('lastLoad').textContent='読み込みに失敗しました：'+e.message;
+  });
+}
+$('btnReload').onclick=loadAll;
+
+// ============ 描画 ============
+function render(){
+  // サマリー
+  $('sTotal').textContent=rows.length;
+  var today=new Date(); var t0=new Date(today.getFullYear(),today.getMonth(),today.getDate()).getTime();
+  $('sToday').textContent=rows.filter(function(r){ try{return new Date(r.at).getTime()>=t0;}catch(e){return false;} }).length;
+  var openBugs=bugs.filter(function(b){ return b.mood==='バグ報告'; }).length;
+  $('sBug').textContent=openBugs;
+
+  // タイプ分布
+  var dist={};
+  rows.forEach(function(r){ if(!r.type)return; dist[r.type]=(dist[r.type]||0)+1; });
+  var keys=Object.keys(dist).sort(function(a,b){ return dist[b]-dist[a]; });
+  var mx=keys.length?dist[keys[0]]:1;
+  $('dist').innerHTML=keys.map(function(k){
+    var c=TYPE_COLORS[k]||'#9aa9b8';
+    var pct=Math.max(Math.round(dist[k]/mx*100),4);
+    return '<div class="row"><span class="lbl">'+esc(k)+'</span>'+
+      '<span class="bg"><span class="bf" style="width:'+pct+'%;background:'+c+'"></span></span>'+
+      '<span class="ct">'+dist[k]+'名</span></div>';
+  }).join('')||'<p class="muted">まだ回答がありません</p>';
+
+  // 一覧
+  $('tbody').innerHTML=rows.map(function(r,i){
+    var c=TYPE_COLORS[r.type]||'#9aa9b8';
+    return '<tr><td>'+fmtDate(r.at)+'</td><td>'+esc(r.ch)+'</td><td><b>'+esc(r.name)+'</b></td><td>'+esc(r.mail)+'</td>'+
+      '<td><span class="typ" style="background:'+c+'">'+esc(r.type||'－')+'</span></td>'+
+      '<td>'+(r.s.shudo||'')+'</td><td>'+(r.s.sokushin||'')+'</td><td>'+(r.s.shiji||'')+'</td><td>'+(r.s.bunseki||'')+'</td>'+
+      '<td><span class="del" data-i="'+i+'">✕</span></td></tr>';
+  }).join('')||'<tr><td colspan="10" class="muted">まだ回答がありません</td></tr>';
+  Array.prototype.forEach.call(document.querySelectorAll('.del'),function(el){
+    el.onclick=function(){
+      var r=rows[Number(el.getAttribute('data-i'))];
+      if(!r) return;
+      if(!confirm(r.name+' さんの回答を削除します。よろしいですか？')) return;
+      sb('promo_tasks?run_id=eq.'+encodeURIComponent(r.run_id)+'&task_key=eq.'+encodeURIComponent(r.task_key),{method:'DELETE'})
+        .then(function(){ loadAll(); })
+        .catch(function(){ alert('削除に失敗しました'); });
+    };
+  });
+
+  // バグ受信箱
+  $('bugBox').innerHTML=bugs.length?bugs.map(function(b){
+    var open=b.mood==='バグ報告';
+    return '<div class="bug"><span class="st '+(open?'open':'done')+'">'+(open?'未対応':'対応済み')+'</span>'+
+      ' <span class="meta">'+fmtDate(b.created_at)+'｜'+esc(b.member_name||'')+'</span>'+
+      '<div class="txt">'+esc(b.worry||'')+'</div>'+
+      '<div class="meta">'+esc(b.want||'')+'</div>'+
+      '<button class="btn line" style="margin-top:6px;padding:6px 14px;font-size:12px;" data-id="'+b.id+'" data-next="'+(open?'対応済み':'バグ報告')+'">'+
+      (open?'対応済みにする':'未対応に戻す')+'</button></div>';
+  }).join(''):'<p class="muted">不具合報告はありません</p>';
+  Array.prototype.forEach.call($('bugBox').querySelectorAll('button'),function(el){
+    el.onclick=function(){
+      sb('ailab_notes?id=eq.'+encodeURIComponent(el.getAttribute('data-id')),{
+        method:'PATCH',body:JSON.stringify({mood:el.getAttribute('data-next')})
+      }).then(function(){ loadAll(); }).catch(function(){ alert('更新に失敗しました'); });
+    };
+  });
+}
+
+// ============ CSV ============
+$('btnCsv').onclick=function(){
+  var head=['日時','チャネル','おなまえ','メール','判定タイプ','主導','促進','支持','分析'];
+  var lines=[head.join(',')].concat(rows.map(function(r){
+    return [r.at,r.ch,r.name,r.mail,r.type,r.s.shudo||'',r.s.sokushin||'',r.s.shiji||'',r.s.bunseki||''].map(function(v){
+      v=String(v==null?'':v);
+      return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;
+    }).join(',');
+  }));
+  var blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='merone_seikaku_shindan.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+};
+
+// ============ 動作チェック（書込→読込→削除） ============
+$('btnHealth').onclick=function(){
+  var log=$('hlog'); log.style.display='block'; log.textContent='動作チェックを開始します…\n';
+  function put(m){ log.textContent+=m+'\n'; }
+  var key='hc_'+Date.now();
+  var row={run_id:'seikaku-selftest',task_key:key,done:true,owner_depts:'seikaku',owner_members:'healthcheck',
+    memo:JSON.stringify({hc:true}),link_url:'',updated_at:new Date().toISOString()};
+  sb('promo_tasks',{method:'POST',body:JSON.stringify(row),headers:{Prefer:'resolution=merge-duplicates'}})
+    .then(function(r){ if(!r.ok)throw new Error('書込 HTTP '+r.status); put('1) 書込 … OK');
+      return sb('promo_tasks?run_id=eq.seikaku-selftest&task_key=eq.'+key); })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(!d||!d.length)throw new Error('読込：書いた行が見つかりません'); put('2) 読込 … OK');
+      return sb('promo_tasks?run_id=eq.seikaku-selftest&task_key=eq.'+key,{method:'DELETE'}); })
+    .then(function(r){ if(!r.ok)throw new Error('削除 HTTP '+r.status); put('3) 削除 … OK');
+      return sb('ailab_notes?member_id=eq.bug_seikaku&limit=1'); })
+    .then(function(r){ if(!r.ok)throw new Error('受信箱 HTTP '+r.status); put('4) 不具合受信箱の接続 … OK\nすべて正常です');
+    })
+    .catch(function(e){ put('❌ '+e.message+'\n→ このメッセージのスクショを添えて開発側へ連絡してください'); });
+};
+})();
+</script>
+</body>
+</html>

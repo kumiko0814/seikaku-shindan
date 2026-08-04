@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Merone 性格診断｜あなたのコミュニケーションタイプ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic',sans-serif;
+  background:#f1f7fb;
+  color:#4a4446;
+  -webkit-text-size-adjust:100%;
+  -webkit-overflow-scrolling:touch;
+  line-height:1.7;
+}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 90px;}
+.brand{text-align:center;padding:14px 0 4px;}
+.brand .logo{font-size:13px;letter-spacing:.35em;color:#bd7886;font-weight:800;}
+.brand h1{font-size:22px;color:#1d3149;font-weight:800;margin-top:4px;letter-spacing:.04em;}
+.brand .sub{font-size:12.5px;color:#7a8ba0;margin-top:2px;}
+.card{background:#fff;border-radius:18px;padding:22px 20px;margin-top:16px;box-shadow:0 4px 18px rgba(38,64,95,.07);}
+.card h2{font-size:16px;color:#26405f;margin-bottom:10px;}
+.note{font-size:12.5px;color:#7a8ba0;margin-top:10px;}
+label{display:block;font-size:13px;font-weight:700;color:#26405f;margin:14px 0 6px;}
+label .req{color:#bd7886;font-size:11px;margin-left:6px;}
+label .opt{color:#9aa9b8;font-size:11px;margin-left:6px;font-weight:600;}
+input[type=text],input[type=email]{
+  width:100%;border:1.5px solid #d7e4ef;border-radius:12px;padding:12px 14px;font-size:16px;
+  font-family:inherit;color:#4a4446;background:#fbfdfe;outline:none;
+}
+input:focus{border-color:#7fb0d2;}
+.btn{
+  display:block;width:100%;border:none;border-radius:999px;padding:15px;margin-top:18px;
+  font-size:15.5px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;
+  background:linear-gradient(135deg,#c76e85,#cf8f9c);
+  box-shadow:0 6px 16px rgba(199,110,133,.28);
+}
+.btn:active{transform:translateY(1px);}
+.btn.gray{background:#eef2f6;color:#26405f;box-shadow:none;}
+.hide{display:none;}
+/* 質問画面 */
+.prog{margin-top:18px;}
+.prog .pt{display:flex;justify-content:space-between;font-size:12px;color:#7a8ba0;font-weight:700;margin-bottom:5px;}
+.prog .pb{height:8px;background:#e2edf5;border-radius:999px;overflow:hidden;}
+.prog .pf{height:100%;background:linear-gradient(90deg,#7fb0d2,#cf8f9c);border-radius:999px;transition:width .25s;}
+.qtext{font-size:17px;font-weight:800;color:#26405f;min-height:70px;display:flex;align-items:center;line-height:1.6;}
+.qnum{font-size:12px;color:#bd7886;font-weight:800;margin-bottom:6px;letter-spacing:.08em;}
+.ansbtn{
+  display:block;width:100%;text-align:left;border:1.5px solid #d7e4ef;background:#fbfdfe;color:#26405f;
+  border-radius:14px;padding:14px 16px;margin-top:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.ansbtn:active{background:#fbeef1;border-color:#cf8f9c;}
+.backlink{display:inline-block;margin-top:16px;font-size:13px;color:#7a8ba0;cursor:pointer;text-decoration:underline;}
+/* 結果画面 */
+.rbadge{text-align:center;padding:6px 0 2px;}
+.rbadge .rl{font-size:13px;color:#7a8ba0;}
+.rbadge .rt{font-size:30px;font-weight:900;letter-spacing:.05em;margin-top:2px;}
+.rbadge .re{font-size:12px;color:#9aa9b8;letter-spacing:.15em;}
+.rcatch{text-align:center;font-size:14.5px;font-weight:800;color:#4a4446;margin-top:10px;background:#fbeef1;border-radius:12px;padding:10px 12px;}
+.bars{margin-top:16px;}
+.bar{margin-top:10px;}
+.bar .bl{display:flex;justify-content:space-between;font-size:13px;font-weight:800;color:#26405f;margin-bottom:3px;}
+.bar .bl .pts{color:#7a8ba0;font-weight:700;}
+.bar .bg{height:14px;background:#eef4f9;border-radius:999px;overflow:hidden;}
+.bar .bf{height:100%;border-radius:999px;width:0;transition:width .8s ease;}
+.sec{margin-top:16px;}
+.sec h3{font-size:13.5px;color:#bd7886;font-weight:800;letter-spacing:.06em;border-bottom:1.5px solid #f3dde2;padding-bottom:4px;margin-bottom:8px;}
+.sec ul{list-style:none;}
+.sec li{font-size:14px;padding-left:1.1em;position:relative;margin-top:4px;}
+.sec li:before{content:"・";position:absolute;left:0;color:#cf8f9c;}
+.sec p{font-size:14px;}
+.savest{font-size:12.5px;text-align:center;margin-top:14px;color:#7a8ba0;}
+.savest.ok{color:#5f8ab0;font-weight:700;}
+.savest.ng{color:#bd7886;font-weight:700;background:#fbeef1;border-radius:10px;padding:10px;}
+footer{max-width:560px;margin:0 auto;padding:0 16px 26px;text-align:center;font-size:11px;color:#a9b7c4;}
+/* 不具合報告 */
+#bugL{position:fixed;right:14px;bottom:16px;background:#fff;border:1.5px solid #e3d3d8;color:#bd7886;
+  font-size:12px;font-weight:800;border-radius:999px;padding:9px 14px;cursor:pointer;z-index:9000;
+  box-shadow:0 4px 12px rgba(38,64,95,.12);}
+#bugM{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(29,49,73,.45);z-index:9001;}
+#bugM.on{display:flex;align-items:center;justify-content:center;padding:20px;}
+#bugM .bx{background:#fff;border-radius:18px;padding:20px;max-width:420px;width:100%;}
+#bugM h3{font-size:15px;color:#26405f;margin-bottom:10px;}
+#bugM textarea{width:100%;height:110px;border:1.5px solid #d7e4ef;border-radius:12px;padding:12px;font-size:15px;font-family:inherit;resize:none;outline:none;}
+#bugM .bb{display:flex;gap:8px;margin-top:12px;}
+#bugM button{flex:1;border:none;border-radius:999px;padding:11px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
+#bugM .s{background:linear-gradient(135deg,#c76e85,#cf8f9c);color:#fff;}
+#bugM .c{background:#eef2f6;color:#26405f;}
+#bugM .done{display:none;font-size:12.5px;color:#bd7886;font-weight:800;margin-top:8px;text-align:center;}
+/* デバッグロガー */
+#dbg{display:none;position:fixed;left:0;right:0;bottom:0;max-height:32vh;overflow:auto;background:rgba(29,49,73,.92);
+  color:#cfe3f3;font-size:11px;font-family:Menlo,monospace;padding:8px 10px;z-index:99999;white-space:pre-wrap;}
+@media (max-width:380px){ .qtext{font-size:16px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="logo">MERONE</div>
+    <h1>性格診断</h1>
+    <div class="sub">あなたのコミュニケーションタイプがわかる｜全20問・約1分</div>
+  </div>
+
+  <!-- 導入 -->
+  <div class="card" id="scrIntro">
+    <h2>直感で答えるだけで、4つのタイプのどれに近いかがわかります</h2>
+    <p style="font-size:14px;">主導・促進・支持・分析の4タイプは、チームでの役割分担や声のかけ方を考えるときの共通言語になります。深く考えず、ふだんの自分に近いものを選んでください。</p>
+    <label>おなまえ<span class="req">必須</span></label>
+    <input type="text" id="inName" placeholder="例）森川くみこ" maxlength="40" autocomplete="name">
+    <label>メールアドレス<span class="opt">任意</span></label>
+    <input type="email" id="inMail" placeholder="例）xxxx@merone.co.jp" maxlength="80" autocomplete="email">
+    <button class="btn" id="btnStart">診断をはじめる</button>
+    <p class="note">回答結果はチーム内の共有用として自動で記録されます。</p>
+  </div>
+
+  <!-- 質問 -->
+  <div class="card hide" id="scrQ">
+    <div class="prog">
+      <div class="pt"><span id="pNum">Q1 / 20</span><span id="pPct">5%</span></div>
+      <div class="pb"><div class="pf" id="pFill" style="width:5%"></div></div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="qnum" id="qNum">Q1</div>
+      <div class="qtext" id="qText"></div>
+    </div>
+    <div id="ansBox"></div>
+    <span class="backlink hide" id="btnBack">← 前の質問にもどる</span>
+  </div>
+
+  <!-- 結果 -->
+  <div class="card hide" id="scrR">
+    <div class="rbadge">
+      <div class="rl" id="rName"></div>
+      <div class="rt" id="rType"></div>
+      <div class="re" id="rEn"></div>
+    </div>
+    <div class="rcatch" id="rCatch"></div>
+    <div class="bars" id="rBars"></div>
+    <div class="sec"><h3>特徴</h3><ul id="rToku"></ul></div>
+    <div class="sec"><h3>強み</h3><ul id="rTsuyo"></ul></div>
+    <div class="sec"><h3>チームでの活かし方</h3><p id="rIkashi"></p></div>
+    <div class="sec"><h3>まわりの方へ｜このタイプへの接し方のコツ</h3><p id="rKotsu"></p></div>
+    <div class="savest" id="saveSt">結果を記録しています…</div>
+    <button class="btn" id="btnCopy">結果をコピーする（LINE・Slack用）</button>
+    <button class="btn gray" id="btnRetry">もう一度診断する</button>
+  </div>
+</div>
+<footer>Merone 性格診断 v20260804a</footer>
+
+<!-- 不具合報告 -->
+<div id="bugL">不具合を報告</div>
+<div id="bugM"><div class="bx">
+  <h3>不具合・気になったことを教えてください</h3>
+  <textarea id="bugT" placeholder="例）診断結果が表示されませんでした（iPhone/Safari）"></textarea>
+  <div class="bb"><button class="c" id="bugC">閉じる</button><button class="s" id="bugS">送信する</button></div>
+  <div class="done" id="bugD">届きました。ありがとうございます。すぐ確認します。</div>
+</div></div>
+
+<div id="dbg"></div>
+
+<script>
+(function(){
+"use strict";
+var VER='20260804a';
+var SB_URL='https://inrvprlyobghviklulcv.supabase.co';
+var SB_KEY='sb_publishable_ZrCNcsRHMci-l7Fns8QtIA_X22XZGJp';
+var P; try{ P=new URLSearchParams(location.search); }catch(e){ P={get:function(){return null;}}; }
+var CH=String(P.get('ch')||'merone').toLowerCase().replace(/[^a-z0-9_\-]/g,'')||'merone';
+var RUN_ID='seikaku-'+CH;
+var DEMO=P.get('demo')==='1';
+var DEBUG=P.get('debug')==='1';
+var AUTO=P.get('auto')==='1';
+
+function dlog(m){
+  if(!DEBUG) return;
+  var d=document.getElementById('dbg'); d.style.display='block';
+  d.textContent+='['+new Date().toLocaleTimeString()+'] '+m+'\n';
+}
+window.onerror=function(msg,src,line){ dlog('ERROR: '+msg+' @'+line); return false; };
+dlog('boot v'+VER+' run_id='+RUN_ID+(DEMO?' demo':''));
+
+// ============ 質問（20問・4件法） ============
+var QS=[
+  '自己主張することが得意だと思う',                       // Q1
+  '常に未来に対して情熱を持っているほうだ',               // Q2
+  '他人のためにしたことを感謝されないと、悔しく思う',     // Q3
+  '嫌なことは嫌と、はっきり言える',                       // Q4
+  '人にすぐに気を許すほうだ',                             // Q5
+  '人から楽しい人とよく言われる',                         // Q6
+  '短い時間にできるだけ多くのことをしようとする',         // Q7
+  '失敗しても立ち直りが早い',                             // Q8
+  '人からものを頼まれてもなかなかノーと言えない',         // Q9
+  'たくさんの情報を検討してから決断をくだす',             // Q10
+  '人の話を聞くことよりも、自分が話していることのほうが多い', // Q11
+  'どちらかというと人見知りをするほうだ',                 // Q12
+  '自分と他人をよく比較する',                             // Q13
+  '変化に強く、適応力があるほうだ',                       // Q14
+  '何事も感情を表すことが苦手だ',                         // Q15
+  '相手の好き嫌いにかかわらず、人の世話をしてしまうほうだ', // Q16
+  '自分が思ったことはストレートに言う',                   // Q17
+  '仕事の出来栄えについて人から認められたい',             // Q18
+  '競争心が強い',                                         // Q19
+  '何事でも完全にしないと気がすまない'                    // Q20
+];
+var LABELS=['あてはまらない','どちらかといえば あてはまらない','どちらかといえば あてはまる','よくあてはまる'];
+
+// ============ 採点（4タイプ×5問・各5〜20点） ============
+var MAP={
+  shudo:   [1,4,7,17,19],
+  sokushin:[2,6,8,11,14],
+  shiji:   [3,5,9,16,18],
+  bunseki: [10,12,13,15,20]
+};
+var TYPES={
+  shudo:{ name:'主導タイプ', en:'DRIVING', color:'#1d3149',
+    catch:'決めて、進める。チームのエンジン役',
+    toku:['結論から話し、スピードを大事にする','目標が決まると迷わず動ける','人に頼るより自分で切り拓くタイプ'],
+    tsuyo:['決断力と推進力','逆境やプレッシャーに強い','停滞した場面を前に動かす力'],
+    ikashi:'ゴールと権限をセットで任せると最速で成果を出します。細かい手順の指定より「何をいつまでに」の共有が向いています。',
+    kotsu:'結論から短く伝えるのが喜ばれます。前置きの長い相談より「要点＋選択肢」で話すとスムーズです。'},
+  sokushin:{ name:'促進タイプ', en:'EXPRESSIVE', color:'#bd7886',
+    catch:'場を明るくする、チームの火付け役',
+    toku:['ひらめきとノリを大事にする','人を巻き込むのが得意','新しいこと・変化にワクワクする'],
+    tsuyo:['発想力と巻き込み力','立ち直りの早さ','場の空気を一気に温める力'],
+    ikashi:'キックオフやアイデア出し、盛り上げが必要な場面で輝きます。楽しさと意義を先に共有すると、力を最大限発揮します。',
+    kotsu:'まず「いいね」から入って一緒に楽しむ姿勢が伝わると心を開きます。細かい指摘は後半にまとめて伝えるのがコツです。'},
+  shiji:{ name:'支持タイプ', en:'AMIABLE', color:'#cf8f9c',
+    catch:'寄り添い、支える。チームの安心基地',
+    toku:['聞き上手で相手に合わせられる','困っている人にいち早く気づく','和を大事にし、争いを好まない'],
+    tsuyo:['信頼関係をつくる力','サポート力・調整力','場の空気を和らげる力'],
+    ikashi:'フォロー役・調整役として欠かせない存在です。本人の頑張りが見えにくいポジションなので、感謝を言葉にして伝えると力を発揮し続けられます。',
+    kotsu:'急かさず、まず気持ちを聞いてください。「どう思う？」と意見を引き出すと、遠慮の奥にある本音を話してくれます。'},
+  bunseki:{ name:'分析タイプ', en:'ANALYTICAL', color:'#7fb0d2',
+    catch:'正確に、着実に。チームの参謀役',
+    toku:['データと根拠で判断する','慎重に考えてから動く','コツコツ積み上げるのが得意'],
+    tsuyo:['正確さと計画性','リスクに気づく力','任された仕事の完成度の高さ'],
+    ikashi:'検証・設計・品質チェックを任せると精度が上がります。考える時間を確保してあげると、最良の答えを持ってきてくれます。',
+    kotsu:'結論を急かさないでください。判断材料（データ・理由・期限）を揃えて渡すと、驚くほどスムーズに動いてくれます。'}
+};
+var ORDER=['shudo','sokushin','shiji','bunseki'];
+
+// ============ 状態 ============
+var ans=[]; var idx=0; var userName=''; var userMail='';
+
+function $(id){ return document.getElementById(id); }
+function show(id){ ['scrIntro','scrQ','scrR'].forEach(function(s){ $(s).classList.toggle('hide', s!==id); }); }
+
+// ============ 画面遷移 ============
+$('btnStart').onclick=function(){
+  var n=$('inName').value.trim();
+  if(!n){ $('inName').focus(); $('inName').style.borderColor='#bd7886'; return; }
+  userName=n; userMail=$('inMail').value.trim();
+  ans=[]; idx=0; renderQ(); show('scrQ');
+  try{ window.scrollTo(0,0); }catch(e){}
+};
+function renderQ(){
+  $('pNum').textContent='Q'+(idx+1)+' / '+QS.length;
+  var pct=Math.round(((idx)/QS.length)*100);
+  $('pPct').textContent=pct+'%';
+  $('pFill').style.width=Math.max(pct,3)+'%';
+  $('qNum').textContent='Q'+(idx+1);
+  $('qText').textContent=QS[idx];
+  var box=$('ansBox'); box.innerHTML='';
+  LABELS.forEach(function(lb,i){
+    var b=document.createElement('button');
+    b.className='ansbtn'; b.type='button'; b.textContent=lb;
+    b.onclick=function(){ answer(i+1); };
+    box.appendChild(b);
+  });
+  $('btnBack').classList.toggle('hide', idx===0);
+}
+$('btnBack').onclick=function(){ if(idx>0){ idx--; ans.pop(); renderQ(); } };
+function answer(v){
+  ans[idx]=v;
+  if(idx<QS.length-1){ idx++; renderQ(); try{ window.scrollTo(0,0); }catch(e){} }
+  else{ showResult(); }
+}
+
+// ============ 判定・結果表示 ============
+function calcScores(){
+  var s={};
+  ORDER.forEach(function(k){
+    var sum=0;
+    MAP[k].forEach(function(qn){ sum+=(ans[qn-1]||1); });
+    s[k]=sum; // 5〜20
+  });
+  return s;
+}
+function topTypes(s){
+  var mx=Math.max(s.shudo,s.sokushin,s.shiji,s.bunseki);
+  return ORDER.filter(function(k){ return s[k]===mx; });
+}
+var lastScores=null, lastTop=null;
+function showResult(){
+  var s=calcScores(); lastScores=s;
+  var tops=topTypes(s); lastTop=tops;
+  var main=TYPES[tops[0]];
+  $('rName').textContent=userName+' さんは…';
+  $('rType').textContent=tops.map(function(k){return TYPES[k].name;}).join(' × ');
+  $('rType').style.color=main.color;
+  $('rEn').textContent=tops.map(function(k){return TYPES[k].en;}).join(' / ');
+  $('rCatch').textContent=(tops.length>1?'2つの顔を持つハイブリッド｜':'')+main.catch;
+  var bars=$('rBars'); bars.innerHTML='';
+  ORDER.forEach(function(k){
+    var t=TYPES[k], v=s[k], pct=Math.round(((v-5)/15)*100);
+    var d=document.createElement('div'); d.className='bar';
+    d.innerHTML='<div class="bl"><span>'+t.name+'</span><span class="pts">'+v+'点</span></div>'+
+      '<div class="bg"><div class="bf" data-w="'+Math.max(pct,4)+'" style="background:'+t.color+'"></div></div>';
+    bars.appendChild(d);
+  });
+  $('rToku').innerHTML=main.toku.map(function(x){return '<li>'+x+'</li>';}).join('');
+  $('rTsuyo').innerHTML=main.tsuyo.map(function(x){return '<li>'+x+'</li>';}).join('');
+  $('rIkashi').textContent=main.ikashi;
+  $('rKotsu').textContent=main.kotsu;
+  show('scrR');
+  try{ window.scrollTo(0,0); }catch(e){}
+  setTimeout(function(){
+    var fs=bars.querySelectorAll('.bf');
+    for(var i=0;i<fs.length;i++){ fs[i].style.width=fs[i].getAttribute('data-w')+'%'; }
+  },60);
+  saveResult(s,tops,0);
+}
+
+// ============ 保存（promo_tasks 相乗り・SQLゼロ） ============
+function saveResult(s,tops,retry){
+  var st=$('saveSt');
+  if(DEMO){ st.textContent='デモモードのため記録していません'; return; }
+  st.className='savest'; st.textContent='結果を記録しています…';
+  var key='r_'+Date.now()+'_'+Math.floor(Math.random()*1000000);
+  var row={
+    run_id:RUN_ID, task_key:key, done:true,
+    owner_depts:'seikaku', owner_members:userName.slice(0,40),
+    memo:JSON.stringify({v:1,name:userName,mail:userMail,
+      type:tops.map(function(k){return TYPES[k].name;}).join('・'),
+      scores:s, answers:ans, ch:CH, at:new Date().toISOString(),
+      ua:navigator.userAgent.slice(0,120)}),
+    link_url:'', updated_at:new Date().toISOString()
+  };
+  fetch(SB_URL+'/rest/v1/promo_tasks',{
+    method:'POST',
+    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},
+    body:JSON.stringify(row)
+  }).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    st.className='savest ok'; st.textContent='結果を記録しました';
+    dlog('save ok '+key);
+  }).catch(function(e){
+    dlog('save fail: '+e.message+' retry='+retry);
+    if(retry<2){ setTimeout(function(){ saveResult(s,tops,retry+1); }, 1500*(retry+1)); return; }
+    st.className='savest ng';
+    st.textContent='通信エラーで記録できませんでした。お手数ですが、この画面のスクリーンショットを管理者に送ってください（結果はこのまま使えます）。';
+  });
+}
+
+// ============ コピー・リトライ ============
+$('btnCopy').onclick=function(){
+  if(!lastScores) return;
+  var s=lastScores;
+  var txt='【Merone性格診断】\n'
+    +userName+'さんの結果：'+lastTop.map(function(k){return TYPES[k].name;}).join(' × ')+'\n'
+    +'主導 '+s.shudo+'点 / 促進 '+s.sokushin+'点 / 支持 '+s.shiji+'点 / 分析 '+s.bunseki+'点（各5〜20点）\n'
+    +'診断はこちら → '+location.origin+location.pathname;
+  function done(){ $('btnCopy').textContent='コピーしました'; setTimeout(function(){ $('btnCopy').textContent='結果をコピーする（LINE・Slack用）'; },1600); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(function(){ legacyCopy(txt); done(); });
+  }else{ legacyCopy(txt); done(); }
+};
+function legacyCopy(t){
+  var ta=document.createElement('textarea'); ta.value=t;
+  ta.style.position='fixed'; ta.style.top='0'; ta.style.left='0'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+}
+$('btnRetry').onclick=function(){
+  ans=[]; idx=0; lastScores=null; lastTop=null;
+  $('saveSt').className='savest'; $('saveSt').textContent='結果を記録しています…';
+  show('scrIntro'); try{ window.scrollTo(0,0); }catch(e){}
+};
+
+// ============ 不具合報告（ailab_notes 相乗り） ============
+(function(){
+  var M=$('bugM');
+  $('bugL').onclick=function(){ M.classList.add('on'); };
+  $('bugC').onclick=function(){ M.classList.remove('on'); $('bugD').style.display='none'; };
+  $('bugS').onclick=function(){
+    var t=$('bugT').value.trim();
+    if(!t){ $('bugT').focus(); return; }
+    var btn=this; btn.disabled=true;
+    function done(){
+      $('bugD').style.display='block'; $('bugT').value=''; btn.disabled=false;
+      setTimeout(function(){ M.classList.remove('on'); $('bugD').style.display='none'; },1800);
+    }
+    if(DEMO){ done(); return; }
+    fetch(SB_URL+'/rest/v1/ailab_notes',{
+      method:'POST',
+      headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({member_id:'bug_seikaku',member_name:'性格診断｜'+(userName||'guest'),
+        mood:'バグ報告',worry:t,
+        want:location.href.slice(0,180)+' ／ '+navigator.userAgent.slice(0,140)})
+    }).then(function(){ done(); }).catch(function(){ btn.disabled=false; alert('送信できませんでした。通信環境をご確認ください。'); });
+  };
+})();
+
+// ============ 動作確認用オートラン（?auto=1） ============
+if(AUTO){
+  try{
+    userName='動作確認テスト'; userMail='';
+    ans=[]; for(var i=0;i<QS.length;i++){ ans.push((i%4)+1); }
+    idx=QS.length-1;
+    showResult();
+    dlog('auto-run done');
+  }catch(e){ dlog('auto-run fail: '+e.message); }
+}
+})();
+</script>
+</body>
+</html>
