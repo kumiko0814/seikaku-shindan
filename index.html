@@ -371,7 +371,7 @@ function saveResult(s,tops,retry){
   };
   fetch(SB_URL+'/rest/v1/promo_tasks',{
     method:'POST',
-    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},
+    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
     body:JSON.stringify(row)
   }).then(function(r){
     if(!r.ok) throw new Error('HTTP '+r.status);
