@@ -20,7 +20,7 @@ h1 small{font-size:12px;color:#bd7886;letter-spacing:.2em;display:block;font-wei
   background:linear-gradient(135deg,#c76e85,#cf8f9c);color:#fff;}
 .btn.blue{background:#e7f0f8;color:#26405f;}
 .btn.line{background:#fff;border:1.5px solid #d7e4ef;color:#26405f;}
-input[type=password],input[type=text]{border:1.5px solid #d7e4ef;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;outline:none;background:#fbfdfe;}
+input[type=text]{border:1.5px solid #d7e4ef;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;outline:none;background:#fbfdfe;}
 table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
 th{background:#eaf3fa;color:#26405f;padding:7px 8px;text-align:left;white-space:nowrap;position:sticky;top:0;}
 td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
@@ -52,10 +52,6 @@ td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
 .bug .st.done{background:#e7f0f8;color:#5f8ab0;}
 .muted{font-size:12.5px;color:#7a8ba0;}
 #hlog{font-size:12.5px;margin-top:8px;white-space:pre-wrap;font-family:Menlo,monospace;background:#fbfdfe;border:1px solid #e6eef5;border-radius:10px;padding:10px;display:none;}
-#gate{max-width:380px;margin:80px auto;text-align:center;}
-#gate .card{padding:26px 22px;}
-#gate input{width:100%;text-align:center;margin-top:12px;}
-#gate .btn{width:100%;margin-top:14px;padding:13px;}
 .topbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;}
 .pm{font-weight:900;}
 .pm.plus{color:#26405f;}
@@ -70,16 +66,6 @@ td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
 </style>
 </head>
 <body>
-
-<div id="gate">
-  <div class="card">
-    <h2>Merone 性格診断｜管理ページ</h2>
-    <p class="muted">あいことばを入力してください</p>
-    <input type="password" id="pw" placeholder="あいことば">
-    <button class="btn" id="pwBtn">ひらく</button>
-    <p class="muted" id="pwNg" style="display:none;color:#bd7886;font-weight:800;margin-top:8px;">あいことばが違います</p>
-  </div>
-</div>
 
 <div class="wrap" id="main" style="display:none;">
   <h1><small>Merone</small>性格診断 管理ページ</h1>
@@ -133,20 +119,20 @@ td{padding:7px 8px;border-bottom:1px solid #eef2f6;white-space:nowrap;}
   </div>
 </div>
 
+<script src="https://kumiko0814.github.io/merone-auth/admin-auth.js"></script>
 <script>
 (function(){
 "use strict";
 var SB_URL='https://inrvprlyobghviklulcv.supabase.co';
 var SB_KEY='sb_publishable_ZrCNcsRHMci-l7Fns8QtIA_X22XZGJp';
-var PASS='merone';
 var TYPE_COLORS={'主導タイプ':'#1d3149','促進タイプ':'#bd7886','支持タイプ':'#cf8f9c','分析タイプ':'#7fb0d2'};
 var rows=[]; var bugs=[];
 
 function $(id){ return document.getElementById(id); }
 function sb(path,opt){
   opt=opt||{};
-  opt.headers=Object.assign({apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'},opt.headers||{});
-  return fetch(SB_URL+'/rest/v1/'+path,opt);
+  opt.headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});
+  return MeroneAdminAuth.fetch(SB_URL+'/rest/v1/'+path,opt);
 }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 function fmtDate(iso){
@@ -173,14 +159,9 @@ function pmCell(v){
 // CSV用：表計算ソフトで数値として読める形
 function pmCsv(v){ var s=validScore(v); return s==null?'':String(s-MID); }
 
-// ============ あいことば ============
-function unlock(){ $('gate').style.display='none'; $('main').style.display='block'; loadAll(); }
-$('pwBtn').onclick=function(){
-  if($('pw').value.trim().toLowerCase()===PASS){ try{sessionStorage.setItem('sk_admin','1');}catch(e){} unlock(); }
-  else{ $('pwNg').style.display='block'; }
-};
-$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter')$('pwBtn').click(); });
-try{ if(sessionStorage.getItem('sk_admin')==='1') unlock(); }catch(e){}
+// ============ 管理者ログイン ============
+function unlock(){ $('main').style.display='block'; loadAll(); }
+MeroneAdminAuth.require({url:SB_URL,anonKey:SB_KEY,title:'性格診断 管理画面'}).then(unlock);
 
 // ============ 読み込み ============
 function loadAll(){

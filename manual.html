@@ -46,25 +46,11 @@ td{padding:8px;border-bottom:1px solid #eef2f6;vertical-align:top;}
 .ty.shiji{border-color:#f0dde2;} .ty.shiji h3{color:#c98a97;} .ty.shiji h4{background:#fbeef1;color:#c98a97;} .ty.shiji li:before{color:#cf8f9c;}
 .ty.bun{border-color:#d3e4f0;} .ty.bun h3{color:#5f8ab0;} .ty.bun h4{background:#e7f0f8;color:#5f8ab0;} .ty.bun li:before{color:#7fb0d2;}
 .quote{font-size:13.5px;background:#f6f9fc;border-left:3px solid #7fb0d2;border-radius:0 10px 10px 0;padding:8px 12px;margin-top:6px;}
-#gate{max-width:380px;margin:80px auto;text-align:center;}
-#gate .card{padding:26px 22px;}
-#gate input{width:100%;text-align:center;margin-top:12px;border:1.5px solid #d7e4ef;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;outline:none;background:#fbfdfe;}
-#gate button{width:100%;margin-top:14px;padding:13px;border:none;border-radius:999px;font-size:14px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#c76e85,#cf8f9c);}
 .muted{font-size:12.5px;color:#7a8ba0;}
 footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
 </style>
 </head>
 <body>
-
-<div id="gate">
-  <div class="card">
-    <h2 style="border:none;padding:0;">Merone 性格診断｜管理者マニュアル</h2>
-    <p class="muted">あいことばを入力してください</p>
-    <input type="password" id="pw" placeholder="あいことば">
-    <button id="pwBtn">ひらく</button>
-    <p class="muted" id="pwNg" style="display:none;color:#bd7886;font-weight:800;margin-top:8px;">あいことばが違います</p>
-  </div>
-</div>
 
 <div class="wrap" id="main" style="display:none;">
   <h1><small>Merone</small>性格診断 管理者マニュアル</h1>
@@ -204,18 +190,13 @@ footer{text-align:center;font-size:11px;color:#a9b7c4;padding-bottom:24px;}
   <footer>Merone 性格診断 管理者マニュアル v20260804d</footer>
 </div>
 
+<script src="https://kumiko0814.github.io/merone-auth/admin-auth.js"></script>
 <script>
 (function(){
 "use strict";
-var PASS='merone';
 function $(id){ return document.getElementById(id); }
-function unlock(){ $('gate').style.display='none'; $('main').style.display='block'; }
-$('pwBtn').onclick=function(){
-  if($('pw').value.trim().toLowerCase()===PASS){ try{sessionStorage.setItem('sk_admin','1');}catch(e){} unlock(); }
-  else{ $('pwNg').style.display='block'; }
-};
-$('pw').addEventListener('keydown',function(e){ if(e.key==='Enter')$('pwBtn').click(); });
-try{ if(sessionStorage.getItem('sk_admin')==='1') unlock(); }catch(e){}
+function unlock(){ $('main').style.display='block'; }
+MeroneAdminAuth.require({url:'https://inrvprlyobghviklulcv.supabase.co',anonKey:'sb_publishable_ZrCNcsRHMci-l7Fns8QtIA_X22XZGJp',title:'性格診断 管理者マニュアル'}).then(unlock);
 })();
 </script>
 </body>

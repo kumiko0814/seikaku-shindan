@@ -4,7 +4,7 @@
 FAZOM社提供のGoogleフォーム版をMerone自社完結版として作り替えたもの。
 
 - 診断: https://kumiko0814.github.io/seikaku-shindan/
-- 管理: https://kumiko0814.github.io/seikaku-shindan/kanri.html （あいことば方式）
+- 管理: https://kumiko0814.github.io/seikaku-shindan/kanri.html （管理者ログイン方式・MeroneAdminAuth）
 
 ## 仕組み
 - 20問・4件法。各タイプ5問×1〜4点＝5〜20点、最高点で判定（同点は併記）
