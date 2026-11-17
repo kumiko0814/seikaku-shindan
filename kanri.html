@@ -161,7 +161,7 @@ function pmCsv(v){ var s=validScore(v); return s==null?'':String(s-MID); }
 
 // ============ 管理者ログイン ============
 function unlock(){ $('main').style.display='block'; loadAll(); }
-MeroneAdminAuth.require({url:SB_URL,anonKey:SB_KEY,title:'性格診断 管理画面'}).then(unlock);
+MeroneAdminAuth.require({url:SB_URL,anonKey:SB_KEY,title:'性格診断 管理画面',app:'seikaku'}).then(unlock);
 
 // ============ 読み込み ============
 function loadAll(){
